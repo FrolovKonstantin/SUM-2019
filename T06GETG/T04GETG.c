@@ -87,7 +87,7 @@ VOID GAUS( void )
 {
   float coef;
   INT i, j, max_r, max_c, y, x, k;
-  GDET = 1;
+  DOUBLE GDET = 1;
 
   for (i = 0; i < N; i++)
   {
@@ -131,7 +131,7 @@ VOID main( void )
   LOADMRTX("IN.txt");
   Go(0);
   GAUS();
-  printf("determinat is %f\n", det);
-  printf("determinat is %f\n", GDET);
+  printf("determinat is %f", det);
+  printf("determinat is %f", GDET);
   getchar();
 }
