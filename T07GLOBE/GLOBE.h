@@ -1,7 +1,7 @@
 #define PI 3.14159265358979323846
 #include <windows.h>
-#define N 59
-#define M 4
+#define N 30
+#define M 37
 
 typedef struct
 {

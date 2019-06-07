@@ -105,7 +105,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     ScreenToClient(hWnd, &pt);
     srand(15);
     t = clock() / 400.0;
-    for (i = 0; i < 10; i++)
+    for (i = 0; i < 1000; i++)
       DrawEyes(hMemDC , rand() % w + sin(2 * t + 10 * i) * 10, rand() % h + sin(t + i), 35, 60, pt.x, pt.y);
     BitBlt(hDc, 0, 0, w, h, hMemDC, 0, 0, SRCCOPY);
     ReleaseDC(hWnd, hDc);

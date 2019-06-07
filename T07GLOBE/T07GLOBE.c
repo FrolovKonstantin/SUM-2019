@@ -4,7 +4,7 @@
 #define WND_CLASS_NAME "My window class"
 #include <math.h>
 #include <stdlib.h>
-#include <time.h>
+#include "timer.h"
 extern VEC G[N][M];
 
 
@@ -39,12 +39,15 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   ShowWindow(hWnd, SW_SHOWNORMAL);
   UpdateWindow(hWnd);
 
-  while(GetMessage(&msg, NULL, 0, 0))
-  {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-  }
-  return msg.wParam;
+  while (TRUE)
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+      if (msg.message == WM_QUIT)
+        break;
+      DispatchMessage(&msg);
+    }
+    else
+      SendMessage(hWnd, WM_TIMER, 47, 0);
 }
 VOID FlipFullScreen( HWND hWnd )
 {
@@ -104,7 +107,6 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     ReleaseDC(hWnd, hDc);
     GLOBE();
     return 0;
-
   case WM_LBUTTONDBLCLK:
     FlipFullScreen(hWnd);
     return 0;
@@ -118,6 +120,12 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     hBm = CreateCompatibleBitmap(hDc, w, h);
     SelectObject(hMemDC, hBm);
     return 0;
+  case WM_KEYDOWN:
+    if (wParam == VK_ESCAPE)
+      DestroyWindow(hWnd);
+    if (wParam == 'P')
+      GLB_IsPause = !GLB_IsPause;
+    return 0;
   case WM_TIMER:
     GetLocalTime(&st);
 
@@ -130,8 +138,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     for (y = 0; y < N; y++)
         for (x = 0; x < M; x++)
         {
-            G[y][x] = ROT_X(G[y][x], 2);
-            G[y][x] = ROT_Y(G[y][x], 2);
+            G[y][x] = ROT_X(G[y][x], 30 * GLB_DeltaTime);
+            G[y][x] = ROT_Y(G[y][x], 30 * GLB_DeltaTime);
         }
     BitBlt(hDc, 0, 0, w , h, hMemDC, 0, 0, SRCCOPY);
     return 0;
