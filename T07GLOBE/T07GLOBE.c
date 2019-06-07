@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+extern VEC G[N][M];
 
 
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
@@ -47,8 +48,8 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 }
 VOID FlipFullScreen( HWND hWnd )
 {
-  static BOOL IsFullScreen = FALSE; /* текущий режим */
-  static RECT SaveRC;               /* сохраненный размер */
+  static BOOL IsFullScreen = FALSE; 
+  static RECT SaveRC;
 
   if (!IsFullScreen)
   {
@@ -56,28 +57,18 @@ VOID FlipFullScreen( HWND hWnd )
     HMONITOR hmon;
     MONITORINFOEX moninfo;
 
-    /* сохраняем старый размер окна */
     GetWindowRect(hWnd, &SaveRC);
 
-    /* определяем в каком мониторе находится окно */
     hmon = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
 
-    /* получаем информацию для монитора */
     moninfo.cbSize = sizeof(moninfo);
     GetMonitorInfo(hmon, (MONITORINFO *)&moninfo);
 
-    /* переходим в полный экран */
-    /* для одного монитора:
-    rc.left = 0;
-    rc.top = 0;
-    rc.right = GetSystemMetrics(SM_CXSCREEN);
-    rc.bottom = GetSystemMetrics(SM_CYSCREEN);
-    */
     rc = moninfo.rcMonitor;
 
     AdjustWindowRect(&rc, GetWindowLong(hWnd, GWL_STYLE), FALSE);
 
-    SetWindowPos(hWnd, HWND_TOP, /* можно HWND_TOPMOST */
+    SetWindowPos(hWnd, HWND_TOP,
       rc.left, rc.top,
       rc.right - rc.left, rc.bottom - rc.top + 201,
       SWP_NOOWNERZORDER);
@@ -85,7 +76,6 @@ VOID FlipFullScreen( HWND hWnd )
   }
   else
   {
-    /* восстанавливаем размер окна */
     SetWindowPos(hWnd, HWND_TOP,
       SaveRC.left, SaveRC.top,
       SaveRC.right - SaveRC.left, SaveRC.bottom - SaveRC.top,
@@ -103,6 +93,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   static HBITMAP hBm;
   SYSTEMTIME st;
   PAINTSTRUCT ps;
+  INT x, y;
 
   switch (Msg)
   {
@@ -135,9 +126,14 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     SelectObject(hMemDC, GetStockObject(WHITE_BRUSH));
     Rectangle(hMemDC, 0, 0, w, h);
 
-    BitBlt(hDc, 0, 0, w , h, hMemDC, 0, 0, SRCCOPY);
     DRAW(hMemDC, w, h);
-    ReleaseDC(hWnd, hDc);
+    for (y = 0; y < N; y++)
+        for (x = 0; x < M; x++)
+        {
+            G[y][x] = ROT_X(G[y][x], 2);
+            G[y][x] = ROT_Y(G[y][x], 2);
+        }
+    BitBlt(hDc, 0, 0, w , h, hMemDC, 0, 0, SRCCOPY);
     return 0;
   case WM_PAINT:
     hDc = BeginPaint(hWnd, &ps);
@@ -153,4 +149,3 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   }
   return DefWindowProc(hWnd, Msg, wParam, lParam);
 }
-
