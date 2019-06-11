@@ -22,7 +22,6 @@
 #  define SetDbgMemHooks() ((VOID)0)
 #endif /* _DEBUG */
 #include <stdlib.h>
-
 #include "mth/mth.h"
 
 /* 64-bit integer data types */
