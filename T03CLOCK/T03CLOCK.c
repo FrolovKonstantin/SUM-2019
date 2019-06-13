@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #define PI 3.14159265358979323846
-#include <timer.h>
+
 
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 

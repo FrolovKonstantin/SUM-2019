@@ -1,36 +1,45 @@
 /* FILE NAME   : DEF.H
-* PURPOSE     : WinAPI animation system.
-*               Base definitions.
-* PROGRAMMER  : Konstantin Frolov.
-* LAST UPDATE : 10.06.2019.
-* NOTE        : Module prefix 'KF5'.
-*/
+ * PURPOSE     : WinAPI animation system.
+ *               Base definitions.
+ * PROGRAMMER  : Konstantin Frolov.
+ * LAST UPDATE : 10.06.2019.
+ * NOTE        : Module prefix 'KF5'.
+ */
 
 #ifndef __RND_H_
 #define __RND_H_
 
-VOID KF5_RndStart(VOID);
-VOID KF5_RndCopyFrame(HDC hDC);
-VOID KF5_RndEnd(VOID);
-VOID KF5_RndClose(VOID);
-VOID KF5_RndResize(INT W, INT H);
-VOID KF5_RndInit(HWND hWnd);
-VOID KF5_RndProjSet(VOID);
+#include "../../def.h"
 
 extern DBL
-KF5_RndProjSize,
-KF5_RndProjDist,
-KF5_RndProjFarClip;
+  KF5_RndProjSize,
+  KF5_RndProjDist,
+  KF5_RndProjFarClip;
 
 extern MATR
-KF5_RndMatrView,
-KF5_RndMatrProj,
-KF5_RndMatrVP;
+  KF5_RndMatrView,
+  KF5_RndMatrProj,
+  KF5_RndMatrVP;
 
 extern HWND KF5_hWndRnd;
 extern HDC KF5_hDCRndFrame;
 extern HBITMAP KF5_hBmRndFrame;
 extern INT KF5_RndFrameW, KF5_RndFrameH;
+
+
+VOID KF5_RndInit( HWND hWnd );
+VOID KF5_RndClose( VOID );
+
+VOID KF5_RndStart( VOID );
+VOID KF5_RndEnd( VOID );
+
+VOID KF5_RndCopyFrame( HDC hDC );
+VOID KF5_RndResize( INT W, INT H );
+
+VOID KF5_RndCamSet(VEC Loc, VEC At, VEC Up1);
+VOID KF5_RndProjSet( VOID );
+
+/*** Primitives ***/
 
 typedef struct tagkf5VERTEX
 {
@@ -48,15 +57,10 @@ typedef struct tagkf5PRIM
   MATR Trans;   /* Additional transformation matrix */
 } kf5PRIM;
 
-VOID KF5_RndProjSet(VOID);
-VOID KF5_RndCamSet(VEC Loc, VEC At, VEC Up1);
-VOID KF5_RndCopyFrame(HDC hDC);
-VOID KF5_RndStart(VOID);
-VOID KF5_RndResize(INT W, INT H);
-VOID KF5_RndClose(VOID);
-BOOL KF5_RndPrimLoad(kf5PRIM *Pr, CHAR *FileName);
-VOID KF5_RndPrimDraw(kf5PRIM *Pr, MATR World);
-VOID KF5_RndPrimFree(kf5PRIM *Pr);
-BOOL KF5_RndPrimCreate(kf5PRIM *Pr, INT NoofV, INT NoofI);
+BOOL KF5_RndPrimLoad( kf5PRIM *Pr, CHAR *FileName );
+VOID KF5_RndPrimDraw( kf5PRIM *Pr, MATR World );
+VOID KF5_RndPrimFree( kf5PRIM *Pr );
+BOOL KF5_RndPrimCreate( kf5PRIM *Pr, INT NoofV, INT NoofI );
+
 #endif
 /*End of RND.H*/

@@ -1,4 +1,4 @@
-/* FILE NAME   : DEF.H
+/* FILE NAME   : RNDPRIM.H
 * PURPOSE     : WinAPI animation system.
 *               Base definitions.
 * PROGRAMMER  : Konstantin Frolov.

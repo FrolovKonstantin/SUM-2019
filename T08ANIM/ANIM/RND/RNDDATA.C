@@ -1,4 +1,4 @@
-/* FILE NAME   : DEF.H
+/* FILE NAME   : DATA.C
 * PURPOSE     : WinAPI animation system.
 *               Base definitions.
 * PROGRAMMER  : Konstantin Frolov.
